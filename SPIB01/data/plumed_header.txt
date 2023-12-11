@@ -1,0 +1,21 @@
+MOLINFO STRUCTURE=step5_0.pdb
+
+# define range of atoms that are not solvents
+fkbp: GROUP ATOMS=1-1663
+dmso: GROUP ATOMS=1664-1673
+
+# center of mass on the fkbp
+c1: COM ATOMS=1-1663
+
+# center of mass of the but of C
+c2: COM ATOMS=1664-1667
+
+d1: DISTANCE ATOMS=c1,c2
+
+# h_bond distance protein and ligand
+# ile_56: ATOMS=871
+h_bond: DISTANCE ATOMS=871,c2
+
+# center of mass of the but of C
+r1: COM ATOMS=1664-1673
+

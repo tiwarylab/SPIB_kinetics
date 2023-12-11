@@ -1,0 +1,100 @@
+[compute-a7-13.zaratan.umd.edu:1645332] PMIX ERROR: ERROR in file gds_ds12_lock_pthread.c at line 165
+[compute-a7-13.zaratan.umd.edu:1645332] PMIX ERROR: NOT-FOUND in file gds_ds12_lock_pthread.c at line 199
+[compute-a7-13.zaratan.umd.edu:1645332] OPAL ERROR: Unreachable in file pmix2x_client.c at line 112
+--------------------------------------------------------------------------
+The application appears to have been direct launched using "srun",
+but OMPI was not built with SLURM's PMI support and therefore cannot
+execute. There are several options for building PMI support under
+SLURM, depending upon the SLURM version you are using:
+
+  version 16.05 or later: you can use SLURM's PMIx support. This
+  requires that you configure and build SLURM --with-pmix.
+
+  Versions earlier than 16.05: you must use either SLURM's PMI-1 or
+  PMI-2 support. SLURM builds PMI-1 by default, or you can manually
+  install PMI-2. You must then build Open MPI using --with-pmi pointing
+  to the SLURM PMI library location.
+
+Please configure as appropriate and try again.
+--------------------------------------------------------------------------
+*** An error occurred in MPI_Init_thread
+*** on a NULL communicator
+*** MPI_ERRORS_ARE_FATAL (processes in this communicator will now abort,
+***    and potentially your MPI job)
+[compute-a7-13.zaratan.umd.edu:1645332] Local abort before MPI_INIT completed completed successfully, but am not able to aggregate error messages, and not able to guarantee that all other processes were killed!
+--------------------------------------------------------------------------
+The library attempted to open the following supporting CUDA libraries,
+but each of them failed.  CUDA-aware support is disabled.
+libcuda.so.1: cannot open shared object file: No such file or directory
+libcuda.dylib: cannot open shared object file: No such file or directory
+/usr/lib64/libcuda.so.1: cannot open shared object file: No such file or directory
+/usr/lib64/libcuda.dylib: cannot open shared object file: No such file or directory
+If you are not interested in CUDA-aware support, then run with
+--mca mpi_cuda_support 0 to suppress this message.  If you are interested
+in CUDA-aware support, then try setting LD_LIBRARY_PATH to the location
+of libcuda.so.1 to get passed this issue.
+--------------------------------------------------------------------------
+                      :-) GROMACS - gmx mdrun, 2019.4 (-:
+
+                            GROMACS is written by:
+     Emile Apol      Rossen Apostolov      Paul Bauer     Herman J.C. Berendsen
+    Par Bjelkmar      Christian Blau   Viacheslav Bolnykh     Kevin Boyd    
+ Aldert van Buuren   Rudi van Drunen     Anton Feenstra       Alan Gray     
+  Gerrit Groenhof     Anca Hamuraru    Vincent Hindriksen  M. Eric Irrgang  
+  Aleksei Iupinov   Christoph Junghans     Joe Jordan     Dimitrios Karkoulis
+    Peter Kasson        Jiri Kraus      Carsten Kutzner      Per Larsson    
+  Justin A. Lemkul    Viveca Lindahl    Magnus Lundborg     Erik Marklund   
+    Pascal Merz     Pieter Meulenhoff    Teemu Murtola       Szilard Pall   
+    Sander Pronk      Roland Schulz      Michael Shirts    Alexey Shvetsov  
+   Alfons Sijbers     Peter Tieleman      Jon Vincent      Teemu Virolainen 
+ Christian Wennberg    Maarten Wolf   
+                           and the project leaders:
+        Mark Abraham, Berk Hess, Erik Lindahl, and David van der Spoel
+
+Copyright (c) 1991-2000, University of Groningen, The Netherlands.
+Copyright (c) 2001-2018, The GROMACS development team at
+Uppsala University, Stockholm University and
+the Royal Institute of Technology, Sweden.
+check out http://www.gromacs.org for more information.
+
+GROMACS is free software; you can redistribute it and/or modify it
+under the terms of the GNU Lesser General Public License
+as published by the Free Software Foundation; either version 2.1
+of the License, or (at your option) any later version.
+
+GROMACS:      gmx mdrun, version 2019.4
+Executable:   /cvmfs/hpcsw.umd.edu/spack-software/2022.06.15/linux-rhel8-zen/gcc-8.4.0/gromacs-2019.4-wrpyksp5lujyzvz3lnrmhcn4olx6urxw/bin/gmx_mpi
+Data prefix:  /cvmfs/hpcsw.umd.edu/spack-software/2022.06.15/linux-rhel8-zen/gcc-8.4.0/gromacs-2019.4-wrpyksp5lujyzvz3lnrmhcn4olx6urxw
+Working dir:  /scratch/zt1/project/tiwary-prj/user/sueminl/2022-10-14/FKBP/colab_DMSO_v3/initial_trial/initial_trial_2
+Command line:
+  gmx_mpi mdrun -v -deffnm md --plumed plumed_initial.dat -cpi md.cpt -ntomp 1
+
+Highest SIMD level requested by all nodes in run: AVX2_256
+SIMD instructions selected at compile time:       AVX2_128
+Compiled SIMD newer than requested; program might crash.
+Reading file md.tpr, VERSION 2019.4 (single precision)
+Changing nstlist from 20 to 80, rlist from 1.223 to 1.321
+
+Using 80 MPI processes
+Using 1 OpenMP thread per MPI process
+
+
+Non-default thread affinity set probably by the OpenMP library,
+disabling internal thread affinity
+starting mdrun 'Title'
+2000000 steps,   4000.0 ps (continuing from step 293421,    586.8 ps).
+step 293421, will finish Mon Dec 11 01:35:30 2023
+step 293431, remaining wall clock time:     0 s          
+
+NOTE: 30 % of the run time was spent communicating energies,
+      you might want to use the -gcom option of mdrun
+
+               Core t (s)   Wall t (s)        (%)
+       Time:        9.084        0.115     7915.1
+                 (ns/day)    (hour/ns)
+Performance:       16.562        1.449
+
+GROMACS reminds you: "Do You Have Sex Maniacs or Schizophrenics or Astrophysicists in Your Family?" (Gogol Bordello)
+
+[compute-a7-13.zaratan.umd.edu:1645335] 79 more processes have sent help message help-mpi-common-cuda.txt / dlopen failed
+[compute-a7-13.zaratan.umd.edu:1645335] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
