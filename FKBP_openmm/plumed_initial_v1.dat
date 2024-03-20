@@ -1,5 +1,3 @@
-#MOLINFO STRUCTURE=step5_0.pdb
-
 # define range of atoms that are not solvents
 #fkbp: GROUP ATOMS=1-1663
 #dmso: GROUP ATOMS=1665-1674
