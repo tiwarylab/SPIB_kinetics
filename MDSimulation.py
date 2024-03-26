@@ -33,7 +33,7 @@ class MDSimulation:
         """A context manager to change to the specified working directory."""
         original_dir = os.getcwd()
         try:
-            os.chdir(original_dir+self.work_dir)
+            os.chdir(self.work_dir)
             yield
         finally:
             os.chdir(original_dir)
@@ -44,7 +44,7 @@ class MDSimulation:
         for f in glob.glob("simulation_prod_run_*"):
             os.remove(f)
 
-    def get_psf(self, path='openmm/'):
+    def get_psf(self, path='../../FKBP_openmm/openmm/'):
         file_path = path + 'sysinfo.dat'
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -54,11 +54,11 @@ class MDSimulation:
         psf.setBox(dim[0]*angstroms,dim[0]*angstroms,dim[0]*angstroms)
         return psf
 
-    def get_pdb(self, path='openmm/'):
+    def get_pdb(self, path='../../FKBP_openmm/openmm/'):
         return PDBFile(path+'step3_input.pdb')
 
 
-    def get_params(self, path='toppar/'):
+    def get_params(self, path='../../FKBP_openmm/toppar/'):
 
         ligand_rtf=os.path.join(path,'top_all36_cgenff.rtf')
         ligand_prm=os.path.join(path,'par_all36_cgenff.prm')
@@ -230,7 +230,6 @@ class MDSimulation:
                         # Assuming the interruption is akin to a final stage, save all xtc_files
                         with open('xtc_files.txt', 'w') as f:
                             for fname in xtc_files:
-                                print(fname)
                                 f.write(fname + '\n')                        
                         break
         
@@ -268,7 +267,7 @@ class MDSimulation:
         with open(file_path, 'r') as file:
             lines = file.readlines()
         with open(file_path, 'w') as file:
-            file.writelines(lines[:-1])
+            file.writelines(lines[:-50])
 
 
     def combine_xtc_files(self, topology_file='step5_0.pdb', stride=2000):
