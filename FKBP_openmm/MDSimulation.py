@@ -9,6 +9,7 @@ import glob
 import time
 from sys import stdout
 import re
+import time
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -25,7 +26,7 @@ from contextlib import contextmanager
 
 class MDSimulation:
 
-    def __init__(self, work_dir='/FKBP_openmm'):
+    def __init__(self, work_dir='.'):
         self.work_dir = os.path.abspath(work_dir)  # Store absolute path to avoid confusion
 
     @contextmanager
@@ -33,7 +34,7 @@ class MDSimulation:
         """A context manager to change to the specified working directory."""
         original_dir = os.getcwd()
         try:
-            os.chdir(self.work_dir)
+            os.chdir(original_dir+self.work_dir)
             yield
         finally:
             os.chdir(original_dir)
@@ -44,7 +45,7 @@ class MDSimulation:
         for f in glob.glob("simulation_prod_run_*"):
             os.remove(f)
 
-    def get_psf(self, path='../../FKBP_openmm/openmm/'):
+    def get_psf(self, path='../../../FKBP_openmm/openmm/'):
         file_path = path + 'sysinfo.dat'
         with open(file_path, 'r') as file:
             data = json.load(file)
@@ -54,11 +55,11 @@ class MDSimulation:
         psf.setBox(dim[0]*angstroms,dim[0]*angstroms,dim[0]*angstroms)
         return psf
 
-    def get_pdb(self, path='../../FKBP_openmm/openmm/'):
+    def get_pdb(self, path='../../../FKBP_openmm/openmm/'):
         return PDBFile(path+'step3_input.pdb')
 
 
-    def get_params(self, path='../../FKBP_openmm/toppar/'):
+    def get_params(self, path='../../../FKBP_openmm/toppar/'):
 
         ligand_rtf=os.path.join(path,'top_all36_cgenff.rtf')
         ligand_prm=os.path.join(path,'par_all36_cgenff.prm')
@@ -163,7 +164,7 @@ class MDSimulation:
         return simulation
 
 
-    def run_MD(self, simulation, positions, nsteps=50000, use_plumed=True, plumed_file=None, report_steps=True, committor=False, stride=2000, threshold=3.0):
+    def run_MD(self, simulation, positions, nsteps=50000, use_plumed=True, plumed_file=None, report_steps=True, save_xtc=False, committor=False, stride=2000, threshold=3.0):
 
 
         pdb_positions = simulation.context.getState(getPositions=True,enforcePeriodicBox=True).getPositions()
@@ -212,13 +213,14 @@ class MDSimulation:
                 elif iter>0:
                     print(' ****  Current steps **** =   %i / %i'%(iter,nsteps))
                     if self.check_condition(threshold):
-                        simulation.reporters=[]
-                        outfname=f'simulation_prod_run_%i.xtc'%iter
-                        xtc_files.append(outfname)
-                        topology=md.Topology.from_openmm(simulation.topology)
-                        python_expression=topology.select_expression('not water and not name CLA and not name NA')
-                        req_indices=np.array(eval(python_expression))
-                        simulation.reporters.append(XTCReporter(outfname, 10, atomSubset=req_indices))
+                        if save_xtc:
+                            simulation.reporters=[]
+                            outfname=f'simulation_prod_run_%i.xtc'%iter
+                            xtc_files.append(outfname)
+                            topology=md.Topology.from_openmm(simulation.topology)
+                            python_expression=topology.select_expression('not water and not name CLA and not name NA')
+                            req_indices=np.array(eval(python_expression))
+                            simulation.reporters.append(XTCReporter(outfname, 10, atomSubset=req_indices))
                         
                         simulation.step(stride)
 
@@ -267,6 +269,12 @@ class MDSimulation:
         with open(file_path, 'r') as file:
             lines = file.readlines()
         with open(file_path, 'w') as file:
+            file.writelines(lines[:-1])
+
+    def remove_line_change_rows(self, file_path='COLVAR'):
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        with open(file_path, 'w') as file:
             file.writelines(lines[:-50])
 
 
@@ -289,5 +297,11 @@ class MDSimulation:
         every_10th_frame.save('every_10th_frame.xtc')
 
 
+
+    def measure_execution_time(self,func, *args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        return result, end_time - start_time
 
 
