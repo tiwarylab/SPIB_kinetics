@@ -84,7 +84,7 @@ all_z_mean = torch.cat(all_z_mean, dim=0).data.numpy()
 
 np.save('FKBP_unbiased_mean_representation.npy', all_z_mean)
 
-print("===== Second updated sigma for RC 1 and RC2 ======")
+print("===== First updated sigma for RC 1 and RC2 ======")
 print(r'[sigma_1,sigma_2] = ',all_z_mean.std(axis=0))
 
 # print(all_z_mean.std(axis=0))
@@ -98,7 +98,6 @@ sigma_2 = round(sigma_2,2)
 height = 1.5 
 bias_factor = 10 
 pace = 5000
-Nround=2
 
 weight0=IB.encoder_mean.weight.cpu().data.numpy()
 bias0=IB.encoder_mean.bias.cpu().data.numpy()
@@ -178,14 +177,8 @@ with open("data/plumed_metaD_ANN.dat", 'w') as f:
             
     f.write(f'\nMETAD ...\nLABEL=metad\nARG='+output_variable+f' SIGMA={sigma_1},{sigma_2} HEIGHT={height} BIASFACTOR={bias_factor} TEMP=300.0 PACE={pace}\nGRID_MIN=-30,-30 GRID_MAX=15,20 GRID_BIN=2500,3000\nCALC_RCT RCT_USTRIDE=1\n... METAD\n')
     f.write('\n')
-    
-    f.write('\n')
-    f.write('# load metaD\n')
-    f.write('\nCOMMITTOR ...\nARG=d1\nSTRIDE=10\nBASIN_LL1=3.0\nBASIN_UL1=10\n... COMMITTOR')
-    
     f.write('\n')
     
-    f.write('\nPRINT ARG='+output_OPs+',h_bond,d1,'+output_variable+',metad.bias,metad.rbias STRIDE=10 FILE=COLVAR_round_%i'%(Nround))
-    f.write('\nDUMPMASSCHARGE FILE=mcfile')
+    f.write('\nPRINT ARG='+output_OPs+',h_bond,d1,'+output_variable+',metad.bias,metad.rbias STRIDE=10 FILE=COLVAR')
     
     
