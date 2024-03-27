@@ -211,8 +211,9 @@ class MDSimulation:
                     simulation.step(stride)
                     
                 elif iter>0:
-                    print(' ****  Current steps **** =   %i / %i'%(iter,nsteps))
-                    if self.check_condition(threshold):
+                    time_steps = 0.002
+                    if iter%5000==0: print(' ****  Current steps  =   %i ps / %i ps'%(iter*time_steps, nsteps*time_steps))
+                    if self.check_condition(threshold,iter):
                         if save_xtc:
                             simulation.reporters=[]
                             outfname=f'simulation_prod_run_%i.xtc'%iter
@@ -244,13 +245,14 @@ class MDSimulation:
 
 
 
-    def check_condition(self, threshold=3.0):
+    def check_condition(self, threshold=3.0,iter=0):
         val=float(open('COLVAR','r').readlines()[-2].strip().split(' ')[29])
         if val>threshold:
             print(f'========= I have reached values:{val:2.2f} ========= ')
             return False
         else: 
-            print(f'      ligand location = {val:3.2f}      ')
+            if iter % 5000 == 0:  # Assuming a stride of 5000; adjust the multiplier as needed
+                print(f'       ligand location = {val:3.2f}      ')
             return True
 
 
