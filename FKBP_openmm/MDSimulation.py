@@ -280,7 +280,7 @@ class MDSimulation:
             file.writelines(lines[:-50])
 
 
-    def combine_xtc_files(self, topology_file='step5_0.pdb', stride=2000):
+    def combine_xtc_files(self, topology_file='step5_1.pdb', stride=2000):
         xtc_files = []
         iter = int(np.loadtxt('last_iter_value.txt'))
         for j in range(0, iter-stride, stride):
