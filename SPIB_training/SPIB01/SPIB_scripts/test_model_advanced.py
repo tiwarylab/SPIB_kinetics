@@ -5,6 +5,10 @@ from MD trajectories. Code maintained by Dedi.
 Read and cite the following when using this method:
 https://aip.scitation.org/doi/abs/10.1063/5.0038198
 """
+
+import os
+os.system('pip install torch')
+
 import numpy as np
 import torch
 import os
