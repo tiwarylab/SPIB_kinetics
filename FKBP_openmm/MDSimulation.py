@@ -252,7 +252,7 @@ class MDSimulation:
             return False
         else: 
             if iter % 5000 == 0:  # Assuming a stride of 5000; adjust the multiplier as needed
-                print(f'       ligand location = {val:3.2f}      ')
+                print(f' Distance between the ligand (CoM) and protein (CoM) = {val:3.2f}   nm   ')
             return True
 
 
